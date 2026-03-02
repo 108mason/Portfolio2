@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>~/portfolio — terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Terminal Chrome -->
+  <div class="terminal-bar">
+    <div class="terminal-dots">
+      <span class="dot close"></span>
+      <span class="dot minimize"></span>
+      <span class="dot maximize"></span>
+    </div>
+    <div class="terminal-title">guest@portfolio:~</div>
+    <div class="terminal-bar-spacer"></div>
+  </div>
+
+  <!-- Navigation (command history sidebar) -->
+  <nav class="cmd-nav" id="cmdNav">
+    <div class="nav-label">HISTORY</div>
+    <a href="#hero" class="nav-cmd active" data-section="hero">whoami</a>
+    <a href="#about" class="nav-cmd" data-section="about">cat about.json</a>
+    <a href="#skills" class="nav-cmd" data-section="skills">ls skills/</a>
+    <a href="#experience" class="nav-cmd" data-section="experience">git log</a>
+    <a href="#projects" class="nav-cmd" data-section="projects">find projects/</a>
+    <a href="#contact" class="nav-cmd" data-section="contact">mail -s "hello"</a>
+  </nav>
+
+  <!-- Terminal Body -->
+  <main class="terminal" id="terminal">
+
+    <!-- ===== HERO / WHOAMI ===== -->
+    <section class="block" id="hero">
+      <div class="prompt-line">
+        <span class="prompt">guest@portfolio:~$</span>
+        <span class="cmd-text typed" data-text="whoami"></span>
+      </div>
+      <div class="output ascii-art">
+<pre>
+  ██████╗ ███████╗██╗   ██╗
+  ██╔══██╗██╔════╝██║   ██║
+  ██║  ██║█████╗  ██║   ██║
+  ██║  ██║██╔══╝  ╚██╗ ██╔╝
+  ██████╔╝███████╗ ╚████╔╝
+  ╚═════╝ ╚══════╝  ╚═══╝
+</pre>
+      </div>
+      <div class="output hero-text">
+        <span class="hi">Full-Stack Developer</span>
+        <span class="sub">I build things for the web. I ship fast, break nothing, and leave clean git logs.</span>
+      </div>
+      <div class="output hero-status">
+        <span class="status-badge available">AVAILABLE FOR HIRE</span>
+        <span class="status-uptime">uptime: <span class="num">6+</span> years</span>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="block" id="about">
+      <div class="prompt-line">
+        <span class="prompt">guest@portfolio:~$</span>
+        <span class="cmd-text typed" data-text="cat about.json"></span>
+      </div>
+      <div class="output json-block">
+        <div class="json-line"><span class="json-brace">{</span></div>
+        <div class="json-line">  <span class="json-key">"name"</span><span class="json-colon">:</span> <span class="json-string">"Your Name"</span><span class="json-comma">,</span></div>
+        <div class="json-line">  <span class="json-key">"title"</span><span class="json-colon">:</span> <span class="json-string">"Full-Stack Developer"</span><span class="json-comma">,</span></div>
+        <div class="json-line">  <span class="json-key">"location"</span><span class="json-colon">:</span> <span class="json-string">"San Francisco, CA"</span><span class="json-comma">,</span></div>
+        <div class="json-line">  <span class="json-key">"available"</span><span class="json-colon">:</span> <span class="json-bool">true</span><span class="json-comma">,</span></div>
+        <div class="json-line">  <span class="json-key">"bio"</span><span class="json-colon">:</span> <span class="json-string">"Developer who loves building things that live on the internet."</span><span class="json-comma">,</span></div>
+        <div class="json-line">  <span class="json-key">"philosophy"</span><span class="json-colon">:</span> <span class="json-string">"Ship fast, iterate faster. Code is a craft."</span><span class="json-comma">,</span></div>
+        <div class="json-line">  <span class="json-key">"interests"</span><span class="json-colon">:</span> <span class="json-bracket">[</span></div>
+        <div class="json-line">    <span class="json-string">"open source"</span><span class="json-comma">,</span></div>
+        <div class="json-line">    <span class="json-string">"cloud architecture"</span><span class="json-comma">,</span></div>
+        <div class="json-line">    <span class="json-string">"optimizing things that don't need optimizing"</span></div>
+        <div class="json-line">  <span class="json-bracket">]</span></div>
+        <div class="json-line"><span class="json-brace">}</span></div>
+      </div>
+    </section>
+
+    <!-- ===== SKILLS ===== -->
+    <section class="block" id="skills">
+      <div class="prompt-line">
+        <span class="prompt">guest@portfolio:~$</span>
+        <span class="cmd-text typed" data-text="ls -la skills/"></span>
+      </div>
+      <div class="output ls-output">
+        <div class="ls-header">total 4 directories, 22 entries</div>
+
+        <div class="ls-group">
+          <div class="ls-dir-label">drwxr-xr-x  languages/</div>
+          <div class="ls-items">
+            <span class="ls-file lang">JavaScript</span>
+            <span class="ls-file lang">TypeScript</span>
+            <span class="ls-file lang">Python</span>
+            <span class="ls-file lang">HTML/CSS</span>
+            <span class="ls-file lang">SQL</span>
+          </div>
+        </div>
+
+        <div class="ls-group">
+          <div class="ls-dir-label">drwxr-xr-x  frameworks/</div>
+          <div class="ls-items">
+            <span class="ls-file framework">React</span>
+            <span class="ls-file framework">Next.js</span>
+            <span class="ls-file framework">Node.js</span>
+            <span class="ls-file framework">Express</span>
+            <span class="ls-file framework">Tailwind</span>
+          </div>
+        </div>
+
+        <div class="ls-group">
+          <div class="ls-dir-label">drwxr-xr-x  tools/</div>
+          <div class="ls-items">
+            <span class="ls-file tool">Git</span>
+            <span class="ls-file tool">Docker</span>
+            <span class="ls-file tool">AWS</span>
+            <span class="ls-file tool">PostgreSQL</span>
+            <span class="ls-file tool">MongoDB</span>
+            <span class="ls-file tool">Redis</span>
+          </div>
+        </div>
+
+        <div class="ls-group">
+          <div class="ls-dir-label">drwxr-xr-x  learning/</div>
+          <div class="ls-items">
+            <span class="ls-file learning">Rust</span>
+            <span class="ls-file learning">WebAssembly</span>
+            <span class="ls-file learning">Machine Learning</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== EXPERIENCE ===== -->
+    <section class="block" id="experience">
+      <div class="prompt-line">
+        <span class="prompt">guest@portfolio:~$</span>
+        <span class="cmd-text typed" data-text="git log --experience --pretty=detailed"></span>
+      </div>
+      <div class="output git-log">
+
+        <div class="commit">
+          <div class="commit-header">
+            <span class="commit-hash">a3f7b2c</span>
+            <span class="commit-tag">HEAD -&gt; career</span>
+          </div>
+          <div class="commit-meta">
+            Author: You &lt;you@email.com&gt;<br/>
+            Date:&nbsp;&nbsp; 2022 — Present
+          </div>
+          <div class="commit-title">Senior Full-Stack Developer @ Tech Corp Inc.</div>
+          <div class="commit-diff">
+            <div class="diff-line add">+ Led migration of monolith to microservices</div>
+            <div class="diff-line add">+ Reduced API response times by 60%</div>
+            <div class="diff-line add">+ Mentored team of 4 junior developers</div>
+          </div>
+          <div class="commit-stack">
+            <span class="stack-tag">React</span>
+            <span class="stack-tag">Node.js</span>
+            <span class="stack-tag">AWS</span>
+            <span class="stack-tag">PostgreSQL</span>
+          </div>
+        </div>
+
+        <div class="commit">
+          <div class="commit-header">
+            <span class="commit-hash">e91d4f8</span>
+          </div>
+          <div class="commit-meta">
+            Author: You &lt;you@email.com&gt;<br/>
+            Date:&nbsp;&nbsp; 2020 — 2022
+          </div>
+          <div class="commit-title">Full-Stack Developer @ StartupXYZ</div>
+          <div class="commit-diff">
+            <div class="diff-line add">+ Built real-time dashboard serving 10K+ users</div>
+            <div class="diff-line add">+ Implemented CI/CD pipeline with 95% coverage</div>
+            <div class="diff-line add">+ Designed RESTful API consumed by 3 client apps</div>
+          </div>
+          <div class="commit-stack">
+            <span class="stack-tag">Vue.js</span>
+            <span class="stack-tag">Django</span>
+            <span class="stack-tag">Docker</span>
+          </div>
+        </div>
+
+        <div class="commit">
+          <div class="commit-header">
+            <span class="commit-hash">7c0ba15</span>
+          </div>
+          <div class="commit-meta">
+            Author: You &lt;you@email.com&gt;<br/>
+            Date:&nbsp;&nbsp; 2018 — 2020
+          </div>
+          <div class="commit-title">Junior Developer @ WebAgency Co.</div>
+          <div class="commit-diff">
+            <div class="diff-line add">+ Delivered 20+ client websites on schedule</div>
+            <div class="diff-line add">+ Introduced automated testing to the team</div>
+            <div class="diff-line add">+ Built custom CMS plugin with 500+ installs</div>
+          </div>
+          <div class="commit-stack">
+            <span class="stack-tag">JavaScript</span>
+            <span class="stack-tag">PHP</span>
+            <span class="stack-tag">WordPress</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section class="block" id="projects">
+      <div class="prompt-line">
+        <span class="prompt">guest@portfolio:~$</span>
+        <span class="cmd-text typed" data-text="find ./projects -type f -name '*.cool'"></span>
+      </div>
+      <div class="output projects-grid">
+
+        <div class="project-card">
+          <div class="project-path">./projects/codesync/</div>
+          <div class="project-name">CodeSync</div>
+          <div class="project-desc">Real-time collaborative code editor with WebSocket sync</div>
+          <div class="project-stack">
+            <span class="stack-tag">React</span>
+            <span class="stack-tag">Socket.io</span>
+            <span class="stack-tag">Monaco</span>
+            <span class="stack-tag">Redis</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link">github</a>
+            <a href="#" class="proj-link">live</a>
+            <span class="proj-stars">342</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-path">./projects/devflow/</div>
+          <div class="project-name">DevFlow</div>
+          <div class="project-desc">CLI toolkit for automating repetitive dev tasks</div>
+          <div class="project-stack">
+            <span class="stack-tag">Node.js</span>
+            <span class="stack-tag">Commander.js</span>
+            <span class="stack-tag">Shell</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link">github</a>
+            <a href="#" class="proj-link">npm</a>
+            <span class="proj-stars">128</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-path">./projects/commitgpt/</div>
+          <div class="project-name">CommitGPT</div>
+          <div class="project-desc">AI that writes your commit messages from diffs</div>
+          <div class="project-stack">
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">OpenAI</span>
+            <span class="stack-tag">Git hooks</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link">github</a>
+            <span class="proj-stars">87</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="block" id="contact">
+      <div class="prompt-line">
+        <span class="prompt">guest@portfolio:~$</span>
+        <span class="cmd-text typed" data-text="mail -s 'hello' you@dev.com"></span>
+      </div>
+      <div class="output contact-block">
+        <div class="contact-msg">
+          Want to work together? I'm open to freelance, full-time roles, or just chatting about cool projects. Don't be a stranger.
+        </div>
+        <div class="contact-links">
+          <a href="mailto:hello@yourdomain.com" class="contact-item">
+            <span class="contact-label">email</span>
+            <span class="contact-value">hello@yourdomain.com</span>
+          </a>
+          <a href="https://github.com/yourusername" target="_blank" class="contact-item">
+            <span class="contact-label">github</span>
+            <span class="contact-value">github.com/yourusername</span>
+          </a>
+          <a href="https://linkedin.com/in/yourusername" target="_blank" class="contact-item">
+            <span class="contact-label">linkedin</span>
+            <span class="contact-value">linkedin.com/in/yourusername</span>
+          </a>
+          <a href="https://twitter.com/yourusername" target="_blank" class="contact-item">
+            <span class="contact-label">twitter</span>
+            <span class="contact-value">@yourusername</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Final blinking prompt -->
+      <div class="prompt-line final-prompt">
+        <span class="prompt">guest@portfolio:~$</span>
+        <span class="cursor-block">_</span>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
