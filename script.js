@@ -182,7 +182,7 @@ async function sendChatMessage() {
     const response = await lexRuntime.recognizeText({
       botId: botId,
       botAliasId: botAliasId,
-      localeId: 'en_US',
+      localeId: 'en_GB',
       sessionId: 'user-' + Date.now(),
       text: message
     }).promise();
