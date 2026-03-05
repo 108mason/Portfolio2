@@ -105,84 +105,122 @@
 // Chat Widget — Amazon Lex Integration
 // ========================================
 
-(function () {
-  "use strict";
+// --- AWS / Lex config ---
+AWS.config.region = 'us-east-1';
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+  IdentityPoolId: 'eu-central-1:e49b8c55-cf36-4866-9081-d833749482d5'
+});
 
-  // --- AWS / Lex config ---
-  AWS.config.region = "us-east-1";
-  AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: "eu-central-1:e49b8c55-cf36-4866-9081-d833749482d5",
-  });
+const lexRuntime = new AWS.LexRuntimeV2();
+const botId = 'ZMKAHXZJQL';
+const botAliasId = 'TSTALIASID';
 
-  const lexRuntime = new AWS.LexRuntimeV2();
-  const botId = "ZMKAHXZJQL";
-  const botAliasId = "TSTALIASID";
-  const sessionId = "user-" + Date.now();
-
-  // --- Toggle chat ---
-  window.toggleChat = function () {
-    document.getElementById("chatWindow").classList.toggle("open");
-    const input = document.getElementById("chatInput");
-    if (document.getElementById("chatWindow").classList.contains("open")) {
-      input.focus();
-    }
-  };
-
-  // --- Send message ---
-  window.sendChatMessage = async function () {
-    const input = document.getElementById("chatInput");
-    const message = input.value.trim();
-    if (!message) return;
-
-    addMessage(message, "user");
-    input.value = "";
-
-    try {
-      const response = await lexRuntime
-        .recognizeText({
-          botId: botId,
-          botAliasId: botAliasId,
-          localeId: "en_US",
-          sessionId: sessionId,
-          text: message,
-        })
-        .promise();
-
-      if (response.messages && response.messages.length > 0) {
-        response.messages.forEach(function (msg) {
-          addMessage(msg.content, "bot");
-        });
-      } else {
-        addMessage("I didn't catch that. Could you rephrase?", "bot");
-      }
-    } catch (error) {
-      console.error("Lex error:", error);
-      addMessage("Connection error. Please try again.", "bot");
-    }
-  };
-
-  // --- Add message to chat ---
-  function addMessage(text, sender) {
-    const messagesDiv = document.getElementById("chatMessages");
-    const msg = document.createElement("div");
-    msg.className = "chat-msg " + sender;
-
-    const prompt = document.createElement("span");
-    prompt.className = "chat-msg-prompt";
-    prompt.textContent = sender === "bot" ? "bot$" : "you$";
-
-    const bubble = document.createElement("span");
-    bubble.className = "chat-msg-text";
-    bubble.textContent = text;
-
-    msg.appendChild(prompt);
-    msg.appendChild(bubble);
-    messagesDiv.appendChild(msg);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+// Test credentials on page load
+AWS.config.credentials.get(function (err) {
+  if (err) {
+    console.error('CREDENTIALS FAILED:', err);
+  } else {
+    console.log('CREDENTIALS WORKING! Identity ID:', AWS.config.credentials.identityId);
   }
+});
 
-  // --- Enter key to send ---
-  document.getElementById("chatInput").addEventListener("keypress", function (e) {
-    if (e.key === "Enter") sendChatMessage();
-  });
-})();
+// --- Toggle chat ---
+function toggleChat() {
+  var chatWindow = document.getElementById('chatWindow');
+  if (chatWindow) {
+    chatWindow.classList.toggle('open');
+    if (chatWindow.classList.contains('open')) {
+      document.getElementById('chatInput').focus();
+    }
+  }
+}
+
+// --- Add message to chat (terminal-themed) ---
+function addMessage(text, sender) {
+  var messagesDiv = document.getElementById('chatMessages');
+  if (!messagesDiv) return;
+
+  var msg = document.createElement('div');
+  msg.className = 'chat-msg ' + sender;
+
+  var prompt = document.createElement('span');
+  prompt.className = 'chat-msg-prompt';
+  prompt.textContent = sender === 'bot' ? 'bot$' : 'you$';
+
+  var bubble = document.createElement('span');
+  bubble.className = 'chat-msg-text';
+  bubble.textContent = text;
+
+  msg.appendChild(prompt);
+  msg.appendChild(bubble);
+  messagesDiv.appendChild(msg);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+// --- Send message to Lex ---
+async function sendChatMessage() {
+  var input = document.getElementById('chatInput');
+  if (!input) return;
+
+  var message = input.value.trim();
+  if (!message) return;
+
+  addMessage(message, 'user');
+  input.value = '';
+
+  // Show typing indicator
+  var typingIndicator = document.getElementById('typingIndicator');
+  if (typingIndicator) typingIndicator.style.display = 'flex';
+
+  try {
+    // Get credentials before calling Lex
+    await new Promise(function (resolve, reject) {
+      AWS.config.credentials.get(function (err) {
+        if (err) {
+          console.error('Credential error:', err);
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    var response = await lexRuntime.recognizeText({
+      botId: botId,
+      botAliasId: botAliasId,
+      localeId: 'en_US',
+      sessionId: 'user-' + Date.now(),
+      text: message
+    }).promise();
+
+    console.log('Lex response:', response);
+
+    if (typingIndicator) typingIndicator.style.display = 'none';
+
+    if (response.messages && response.messages.length > 0) {
+      addMessage(response.messages[0].content, 'bot');
+    }
+  } catch (error) {
+    console.error('Error details:', error);
+
+    if (typingIndicator) typingIndicator.style.display = 'none';
+
+    var errorMessage = 'Connection error. Please try again.';
+    if (error.code === 'CredentialsError' || (error.message && error.message.indexOf('Missing credentials') !== -1)) {
+      errorMessage = 'Configuration error: Please check Identity Pool ID';
+    } else if (error.code === 'AccessDeniedException') {
+      errorMessage = 'Permission error: IAM role needs Lex access';
+    } else if (error.code === 'ResourceNotFoundException') {
+      errorMessage = 'Bot configuration error';
+    }
+
+    addMessage(errorMessage, 'bot');
+  }
+}
+
+// --- Enter key to send ---
+document.addEventListener('keypress', function (e) {
+  if (e.key === 'Enter' && e.target.id === 'chatInput') {
+    sendChatMessage();
+  }
+});
