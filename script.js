@@ -106,9 +106,9 @@
 // ========================================
 
 // --- AWS / Lex config ---
-AWS.config.region = 'eu-central-1';
+AWS.config.region = 'eu-central-1'; // Frankfurt
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-  IdentityPoolId: 'eu-central-1:e49b8c55-cf36-4866-9081-d833749482d5'
+  IdentityPoolId: 'eu-central-1:9087a116-b89c-433f-89a3-890e4c4f9611'
 });
 
 const lexRuntime = new AWS.LexRuntimeV2();
@@ -119,7 +119,6 @@ const botAliasId = 'TSTALIASID';
 AWS.config.credentials.get((err) => {
   if (err) {
     console.error('CREDENTIALS FAILED:', err);
-    console.error('Check your Identity Pool ID and region');
   } else {
     console.log('CREDENTIALS WORKING! Identity ID:', AWS.config.credentials.identityId);
   }
