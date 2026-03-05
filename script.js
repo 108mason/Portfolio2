@@ -100,3 +100,89 @@
     }
   });
 })();
+
+// ========================================
+// Chat Widget — Amazon Lex Integration
+// ========================================
+
+(function () {
+  "use strict";
+
+  // --- AWS / Lex config ---
+  AWS.config.region = "us-east-1";
+  AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: "eu-central-1:e49b8c55-cf36-4866-9081-d833749482d5",
+  });
+
+  const lexRuntime = new AWS.LexRuntimeV2();
+  const botId = "ZMKAHXZJQL";
+  const botAliasId = "TSTALIASID";
+  const sessionId = "user-" + Date.now();
+
+  // --- Toggle chat ---
+  window.toggleChat = function () {
+    document.getElementById("chatWindow").classList.toggle("open");
+    const input = document.getElementById("chatInput");
+    if (document.getElementById("chatWindow").classList.contains("open")) {
+      input.focus();
+    }
+  };
+
+  // --- Send message ---
+  window.sendChatMessage = async function () {
+    const input = document.getElementById("chatInput");
+    const message = input.value.trim();
+    if (!message) return;
+
+    addMessage(message, "user");
+    input.value = "";
+
+    try {
+      const response = await lexRuntime
+        .recognizeText({
+          botId: botId,
+          botAliasId: botAliasId,
+          localeId: "en_US",
+          sessionId: sessionId,
+          text: message,
+        })
+        .promise();
+
+      if (response.messages && response.messages.length > 0) {
+        response.messages.forEach(function (msg) {
+          addMessage(msg.content, "bot");
+        });
+      } else {
+        addMessage("I didn't catch that. Could you rephrase?", "bot");
+      }
+    } catch (error) {
+      console.error("Lex error:", error);
+      addMessage("Connection error. Please try again.", "bot");
+    }
+  };
+
+  // --- Add message to chat ---
+  function addMessage(text, sender) {
+    const messagesDiv = document.getElementById("chatMessages");
+    const msg = document.createElement("div");
+    msg.className = "chat-msg " + sender;
+
+    const prompt = document.createElement("span");
+    prompt.className = "chat-msg-prompt";
+    prompt.textContent = sender === "bot" ? "bot$" : "you$";
+
+    const bubble = document.createElement("span");
+    bubble.className = "chat-msg-text";
+    bubble.textContent = text;
+
+    msg.appendChild(prompt);
+    msg.appendChild(bubble);
+    messagesDiv.appendChild(msg);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  // --- Enter key to send ---
+  document.getElementById("chatInput").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") sendChatMessage();
+  });
+})();

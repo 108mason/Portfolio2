@@ -627,6 +627,214 @@ body {
 }
 
 /* ----------------------------------------
+   Chat Widget (Terminal-themed)
+   ---------------------------------------- */
+.chat-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--bg-lighter);
+  border: 1px solid var(--border);
+  color: var(--green);
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.chat-btn:hover {
+  border-color: var(--green);
+  transform: scale(1.08);
+}
+
+.chat-btn-icon {
+  line-height: 1;
+}
+
+.chat-window {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 370px;
+  height: 480px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  z-index: 900;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+.chat-window.open {
+  display: flex;
+}
+
+.chat-bar {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  background: var(--bg-lighter);
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.chat-bar-dots {
+  display: flex;
+  gap: 6px;
+  margin-right: 10px;
+}
+
+.chat-bar-dots .dot {
+  width: 10px;
+  height: 10px;
+}
+
+.chat-bar-title {
+  flex: 1;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.chat-bar-close {
+  font-size: 1.1rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 4px;
+  transition: color 0.15s;
+}
+
+.chat-bar-close:hover {
+  color: var(--red);
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg);
+}
+
+.chat-msg {
+  display: flex;
+  gap: 8px;
+  max-width: 90%;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.chat-msg.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-msg.bot {
+  align-self: flex-start;
+}
+
+.chat-msg-prompt {
+  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+
+.chat-msg.bot .chat-msg-prompt {
+  color: var(--cyan);
+}
+
+.chat-msg.user .chat-msg-prompt {
+  color: var(--green);
+}
+
+.chat-msg-text {
+  padding: 6px 12px;
+  border-radius: 6px;
+  word-break: break-word;
+}
+
+.chat-msg.bot .chat-msg-text {
+  background: var(--bg-lighter);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.chat-msg.user .chat-msg-text {
+  background: rgba(63, 185, 80, 0.12);
+  color: var(--green);
+  border: 1px solid var(--green-dim);
+}
+
+.chat-input-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-lighter);
+}
+
+.chat-input-prompt {
+  color: var(--green);
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.chat-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.8rem;
+  padding: 7px 10px;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.chat-input:focus {
+  border-color: var(--green);
+}
+
+.chat-input::placeholder {
+  color: var(--text-dim);
+}
+
+.chat-send {
+  background: var(--green-dim);
+  color: #fff;
+  border: none;
+  font-family: var(--font);
+  font-size: 0.75rem;
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.chat-send:hover {
+  background: var(--green);
+}
+
+/* ----------------------------------------
    Responsive
    ---------------------------------------- */
 @media (max-width: 900px) {
@@ -644,6 +852,21 @@ body {
 }
 
 @media (max-width: 700px) {
+  .chat-btn {
+    bottom: 60px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    font-size: 0.85rem;
+  }
+
+  .chat-window {
+    bottom: 118px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    height: 400px;
+  }
   .cmd-nav {
     position: fixed;
     top: auto;

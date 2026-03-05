@@ -313,6 +313,37 @@
 
   </main>
 
+  <!-- Chat Button -->
+  <button class="chat-btn" id="chatBtn" onclick="toggleChat()">
+    <span class="chat-btn-icon">&gt;_</span>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-bar">
+      <div class="chat-bar-dots">
+        <span class="dot close"></span>
+        <span class="dot minimize"></span>
+        <span class="dot maximize"></span>
+      </div>
+      <span class="chat-bar-title">bot@support:~</span>
+      <span class="chat-bar-close" onclick="toggleChat()">&times;</span>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">
+        <span class="chat-msg-prompt">bot$</span>
+        <span class="chat-msg-text">Hello! How can I help you today?</span>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <span class="chat-input-prompt">&gt;</span>
+      <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." />
+      <button class="chat-send" onclick="sendChatMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- AWS SDK -->
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1048.0.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
