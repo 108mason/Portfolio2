@@ -113,7 +113,7 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 
 const lexRuntime = new AWS.LexRuntimeV2();
 const botId = 'ZMKAHXZJQL';
-const botAliasId = 'TSTALIASID';
+const botAliasId = 'O4EYT5K2GX'; // FinalBot alias pointing to version 1
 
 // Test credentials on page load
 AWS.config.credentials.get((err) => {
@@ -173,28 +173,19 @@ async function sendChatMessage() {
     // Get credentials before calling Lex
     await new Promise((resolve, reject) => {
       AWS.config.credentials.get((err) => {
-        if (err) {
-          console.error('Credential error:', err);
-          reject(err);
-        } else {
-          console.log('Got credentials:', AWS.config.credentials.identityId);
-          resolve();
-        }
+        if (err) reject(err);
+        else resolve();
       });
     });
 
-    console.log('Sending to Lex:', message);
-
+    // Call Lex with production alias
     const response = await lexRuntime.recognizeText({
       botId: botId,
       botAliasId: botAliasId,
       localeId: 'en_US',
       sessionId: 'user-' + Date.now(),
-      text: message,
-      botVersion: 'DRAFT'
+      text: message
     }).promise();
-
-    console.log('Lex response:', response);
 
     if (typingIndicator) typingIndicator.style.display = 'none';
 
@@ -202,20 +193,15 @@ async function sendChatMessage() {
       addMessage(response.messages[0].content, 'bot');
     }
   } catch (error) {
-    console.error('Error details:', error);
+    console.error('Error:', error);
 
     if (typingIndicator) typingIndicator.style.display = 'none';
 
     let errorMessage = 'Connection error. Please try again.';
-    if (error.code === 'CredentialsError' || error.message?.includes('Missing credentials')) {
-      errorMessage = 'Configuration error: Please check Identity Pool ID';
-      console.error('Check your Identity Pool ID in the code');
-    } else if (error.code === 'AccessDeniedException') {
-      errorMessage = 'Permission error: IAM role needs Lex access';
-      console.error('Add AmazonLexRunBotsOnly policy to your Cognito role');
+    if (error.code === 'AccessDeniedException') {
+      errorMessage = 'Permission error. Please contact support.';
     } else if (error.code === 'ResourceNotFoundException') {
-      errorMessage = 'Bot configuration error';
-      console.error('Check bot ID and alias ID');
+      errorMessage = 'Bot configuration error.';
     }
 
     addMessage(errorMessage, 'bot');
