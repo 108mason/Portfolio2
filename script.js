@@ -190,7 +190,8 @@ async function sendChatMessage() {
       botAliasId: botAliasId,
       localeId: 'en_US',
       sessionId: 'user-' + Date.now(),
-      text: message
+      text: message,
+      botVersion: 'DRAFT'
     }).promise();
 
     console.log('Lex response:', response);
