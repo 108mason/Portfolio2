@@ -106,7 +106,7 @@
 // ========================================
 
 // --- AWS / Lex config ---
-AWS.config.region = 'us-east-1';
+AWS.config.region = 'eu-central-1';
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
   IdentityPoolId: 'eu-central-1:e49b8c55-cf36-4866-9081-d833749482d5'
 });
@@ -116,9 +116,10 @@ const botId = 'ZMKAHXZJQL';
 const botAliasId = 'TSTALIASID';
 
 // Test credentials on page load
-AWS.config.credentials.get(function (err) {
+AWS.config.credentials.get((err) => {
   if (err) {
     console.error('CREDENTIALS FAILED:', err);
+    console.error('Check your Identity Pool ID and region');
   } else {
     console.log('CREDENTIALS WORKING! Identity ID:', AWS.config.credentials.identityId);
   }
@@ -126,28 +127,25 @@ AWS.config.credentials.get(function (err) {
 
 // --- Toggle chat ---
 function toggleChat() {
-  var chatWindow = document.getElementById('chatWindow');
+  const chatWindow = document.getElementById('chatWindow');
   if (chatWindow) {
     chatWindow.classList.toggle('open');
-    if (chatWindow.classList.contains('open')) {
-      document.getElementById('chatInput').focus();
-    }
   }
 }
 
 // --- Add message to chat (terminal-themed) ---
 function addMessage(text, sender) {
-  var messagesDiv = document.getElementById('chatMessages');
+  const messagesDiv = document.getElementById('chatMessages');
   if (!messagesDiv) return;
 
-  var msg = document.createElement('div');
+  const msg = document.createElement('div');
   msg.className = 'chat-msg ' + sender;
 
-  var prompt = document.createElement('span');
+  const prompt = document.createElement('span');
   prompt.className = 'chat-msg-prompt';
   prompt.textContent = sender === 'bot' ? 'bot$' : 'you$';
 
-  var bubble = document.createElement('span');
+  const bubble = document.createElement('span');
   bubble.className = 'chat-msg-text';
   bubble.textContent = text;
 
@@ -159,33 +157,36 @@ function addMessage(text, sender) {
 
 // --- Send message to Lex ---
 async function sendChatMessage() {
-  var input = document.getElementById('chatInput');
+  const input = document.getElementById('chatInput');
   if (!input) return;
 
-  var message = input.value.trim();
+  const message = input.value.trim();
   if (!message) return;
 
   addMessage(message, 'user');
   input.value = '';
 
   // Show typing indicator
-  var typingIndicator = document.getElementById('typingIndicator');
+  const typingIndicator = document.getElementById('typingIndicator');
   if (typingIndicator) typingIndicator.style.display = 'flex';
 
   try {
     // Get credentials before calling Lex
-    await new Promise(function (resolve, reject) {
-      AWS.config.credentials.get(function (err) {
+    await new Promise((resolve, reject) => {
+      AWS.config.credentials.get((err) => {
         if (err) {
           console.error('Credential error:', err);
           reject(err);
         } else {
+          console.log('Got credentials:', AWS.config.credentials.identityId);
           resolve();
         }
       });
     });
 
-    var response = await lexRuntime.recognizeText({
+    console.log('Sending to Lex:', message);
+
+    const response = await lexRuntime.recognizeText({
       botId: botId,
       botAliasId: botAliasId,
       localeId: 'en_US',
@@ -205,13 +206,16 @@ async function sendChatMessage() {
 
     if (typingIndicator) typingIndicator.style.display = 'none';
 
-    var errorMessage = 'Connection error. Please try again.';
-    if (error.code === 'CredentialsError' || (error.message && error.message.indexOf('Missing credentials') !== -1)) {
+    let errorMessage = 'Connection error. Please try again.';
+    if (error.code === 'CredentialsError' || error.message?.includes('Missing credentials')) {
       errorMessage = 'Configuration error: Please check Identity Pool ID';
+      console.error('Check your Identity Pool ID in the code');
     } else if (error.code === 'AccessDeniedException') {
       errorMessage = 'Permission error: IAM role needs Lex access';
+      console.error('Add AmazonLexRunBotsOnly policy to your Cognito role');
     } else if (error.code === 'ResourceNotFoundException') {
       errorMessage = 'Bot configuration error';
+      console.error('Check bot ID and alias ID');
     }
 
     addMessage(errorMessage, 'bot');
@@ -219,7 +223,7 @@ async function sendChatMessage() {
 }
 
 // --- Enter key to send ---
-document.addEventListener('keypress', function (e) {
+document.addEventListener('keypress', function(e) {
   if (e.key === 'Enter' && e.target.id === 'chatInput') {
     sendChatMessage();
   }
