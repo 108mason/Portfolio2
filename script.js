@@ -113,7 +113,7 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 
 const lexRuntime = new AWS.LexRuntimeV2();
 const botId = 'ZMKAHXZJQL';
-const botAliasId = 'KZGQCEF79N';
+const botAliasId = 'TSTALIASID';
 
 // Test credentials on page load
 AWS.config.credentials.get((err) => {
