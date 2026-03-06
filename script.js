@@ -168,6 +168,7 @@ async function sendChatMessage() {
   // Show typing indicator
   const typingIndicator = document.getElementById('typingIndicator');
   if (typingIndicator) typingIndicator.style.display = 'flex';
+  console.log('1. Typing indicator shown, getting credentials...');
 
   try {
     // Get credentials before calling Lex
@@ -177,6 +178,7 @@ async function sendChatMessage() {
         else resolve();
       });
     });
+    console.log('2. Credentials OK, calling Lex...');
 
     // Call Lex with production alias
     const response = await lexRuntime.recognizeText({
