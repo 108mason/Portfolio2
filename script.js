@@ -187,10 +187,14 @@ async function sendChatMessage() {
       text: message
     }).promise();
 
+    console.log('Lex response:', JSON.stringify(response, null, 2));
+
     if (typingIndicator) typingIndicator.style.display = 'none';
 
     if (response.messages && response.messages.length > 0) {
       addMessage(response.messages[0].content, 'bot');
+    } else {
+      addMessage('(No response from bot)', 'bot');
     }
   } catch (error) {
     console.error('Error:', error);
